@@ -6,8 +6,11 @@
       user: name=hadoop
     - name: Create some tmp nodes
       command: mkdir -p /scratch/tmp0
+    - name: Halt Spark
+      # As long as SparkExecutorBackend, wait ... then worker_stop.sh
+      shell: while `ps x | grep SparkExecutorBackend | grep -vq grep`; do echo -n .; sleep 60; done && echo /usr/local/spark/bin/worker_stop.sh
     - name: Ensure spark is not running
-      shell: ps x | grep Spark | grep -v grep || true
+      shell: "! ps x | grep Spark | grep -qv grep"
     - name: Assign scratch partitions to hadoop user
       shell: chown -R hadoop /scratch/tmp*
     - name: Provision mapred-site.xml

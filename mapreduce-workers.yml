@@ -12,12 +12,9 @@
       shell: chown -R hadoop /scratch/tmp*
     - name: Provision mapred-site.xml
       template: src=templates/mapred-site.xml-mapreduce dest=/opt/mapr/conf/mapred-site.xml
-#    - name: Configure io.sort.mb
-#      lineinfile: dest=/opt/mapr/conf/mapred-site.xml regexp='  <value>.*</value>' insertbefore='  <name>io.sort.mb</name>' line='  <value>400</value>'
-#    - name: Configure io.sort.factor
-#      lineinfile: dest=/opt/mapr/conf/mapred-site.xml regexp='  <value>.*</value>' insertbefore='  <name>io.sort.factor</name>' line='  <value>40</value>'
     - name: Start Map-Reduce TaskTracker
       command: echo /opt/mapr/bin/tt_start.sh
+      # NOTE: Can not seem to notify to a different node ...
 #      notify:
 #        - restart JobTracker
 #  handlers:

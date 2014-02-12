@@ -79,4 +79,12 @@ PLAY RECAP ********************************************************************
 192.xxx.xxx.246            : ok=8    changed=5    unreachable=0    failed=0   
 198.xx.xxx.206             : ok=8    changed=6    unreachable=0    failed=0   
 198.xx.xxx.27              : ok=8    changed=6    unreachable=0    failed=0   
+
+0-15:19 dannhowa@localhost commando$ ./commando status
+[mapreduce-workers]
+
+[spark-workers]
+192.xxx.xxx.246
+198.xx.xxx.27
+198.xx.xxx.206
 ```

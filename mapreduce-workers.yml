@@ -1,0 +1,25 @@
+---
+- hosts: mapreduce-workers
+  remote_user: root
+  tasks:
+    - name: Provision hadoop user
+      user: name=hadoop
+    - name: Create some tmp nodes
+      command: mkdir -p /scratch/tmp0
+    - name: Ensure spark is not running
+      shell: ps x | grep Spark | grep -v grep || true
+    - name: Assign scratch partitions to hadoop user
+      shell: chown -R hadoop /scratch/tmp*
+    - name: Provision mapred-site.xml
+      template: src=templates/mapred-site.xml-mapreduce dest=/opt/mapr/conf/mapred-site.xml
+#    - name: Configure io.sort.mb
+#      lineinfile: dest=/opt/mapr/conf/mapred-site.xml regexp='  <value>.*</value>' insertbefore='  <name>io.sort.mb</name>' line='  <value>400</value>'
+#    - name: Configure io.sort.factor
+#      lineinfile: dest=/opt/mapr/conf/mapred-site.xml regexp='  <value>.*</value>' insertbefore='  <name>io.sort.factor</name>' line='  <value>40</value>'
+    - name: Start Map-Reduce TaskTracker
+      command: echo /opt/mapr/bin/tt_start.sh
+#      notify:
+#        - restart JobTracker
+#  handlers:
+#    - name: restart JobTracker
+#      shell: while [ `echo $(( RANDOM%12 ))` -ne 0 ]; do sleep 1; echo -n .; done && echo /opt/mapr/bin/jb_stop.sh && echo /opt/mapr/bin/jb_start.sh

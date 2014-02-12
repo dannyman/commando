@@ -1,0 +1,39 @@
+<property>
+  <name>hostname</name>
+  <value>{{ ansible_hostname }}</value>
+  <description>
+  Salmon of Doubt
+  </description>
+</property>
+
+<property>
+  <name>io.sort.danny</name>
+  <value>600</value>
+  <description>
+  Red Herring
+  </description>
+</property>
+
+<property>
+  <name>io.sort.mb</name>
+  <value>512</value>
+  <description>
+  This value sets the size, in megabytes, of the memory buffer that holds map outputs before writing the final map outputs.
+  </description>
+</property>
+
+<property>
+  <name>io.sort.factor</name>
+  <value>256</value>
+  <description>
+  Should be io.sort.mb / 10
+  </description>
+</property>
+
+<property>
+  <name>io.sort.karthik</name>
+  <value>900</value>
+  <description>
+  Blue Herring
+  </description>
+</property>

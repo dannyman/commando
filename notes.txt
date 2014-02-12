@@ -1,0 +1,45 @@
+2014-02-11
+@2100
+
+Dynamic Inventory
+
+ansible -i inventory.sh will use inventory.sh to generate a JSON
+inventory file.
+
+More: http://docs.ansible.com/developing_inventory.html
+
+inventory.sh --host <hostname> would have to print a JSON dict of
+variables.
+
+So, this might be useful in dynamically assigning hosts.
+
+
+@2107
+
+Ad-Hoc Package Install
+
+ansible -i inventory.sh all -u root -m apt -a "name=vim state=installed"
+
+More: http://docs.ansible.com/intro_adhoc.html
+
+
+@2116
+
+Manage Long-Running Tasks in Background
+
+http://docs.ansible.com/intro_adhoc.html#time-limited-background-operations
+
+
+2014-02-12
+@0925
+
+For doing the config change: http://docs.ansible.com/lineinfile_module.html
+
+- lineinfile: dest=/opt/mapr/conf/mapred-site.xml regex='<value>.*</value>' insertafter='  <name>io.sort.mb</name>' line='  <value>400</value>'
+
+
+@0953
+
+It looks like we can't run the handler on a different host.  For this
+task, it seems simplest to handle the name node restart in the commando
+script.

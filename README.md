@@ -2,6 +2,10 @@ This is a contrived learning experiment: provide a control script which will ues
 
 Will assign nodes to spark or to mapreduce job role (hadoop)
 
+Dependencies:
+* Remote nodes with SSH set up
+* Remote nodes "assigned" to existing roles in files mapreduce-workers.inv and spark-workers.inv
+
 ```
 Usage: ./commando <command> <count>
 command should be either morespark or morehadoop or status

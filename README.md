@@ -80,6 +80,9 @@ PLAY RECAP ********************************************************************
 198.xx.xxx.206             : ok=8    changed=6    unreachable=0    failed=0   
 198.xx.xxx.27              : ok=8    changed=6    unreachable=0    failed=0   
 
+Now to simulate restart of hadoop name node: .... DONE
+
+Looks good, boss!
 0-15:19 dannhowa@localhost commando$ ./commando status
 [mapreduce-workers]
 

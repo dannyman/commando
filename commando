@@ -47,4 +47,21 @@ elif [ "$command" == 'morehadoop' ]; then
 fi
 
 # Now the magic happens ...
-ansible-playbook -v -i inventory.sh mapreduce-workers.yml spark-workers.yml
+ansible-playbook -i inventory.sh mapreduce-workers.yml spark-workers.yml
+if [ $? -ne 0 ]; then
+    warn_ansible="WARNING: Ansible threw some errors.  You should look into that."
+else
+    warn_ansible='Looks good, boss!'
+fi
+
+echo -n "Now to simulate restart of hadoop name node: "
+# while [ `ssh $namenode_host hadoop job -list` -ne 0 ]; do
+while [ `echo $(( RANDOM%12 ))` -ne 0 ]; do
+    echo -n .
+    sleep 1
+done
+#ssh $namenode_host "/opt/mapr/bin/jb_stop.sh && /opt/mapr/bin/jb_start.sh"
+echo " DONE"
+
+echo
+echo $warn_ansible

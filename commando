@@ -1,0 +1,50 @@
+#!/bin/sh
+command=$1
+count=$2
+
+if [ "$command" == 'status' ]; then
+    echo '[mapreduce-workers]'
+    cat mapreduce-workers.inv
+    echo
+    echo '[spark-workers]'
+    cat spark-workers.inv
+    exit 0
+fi
+
+if [ "$command" == '' -o "$count" == '' ]; then
+    echo "Usage: $0 <command> <count>"
+    echo "command should be either morespark or morehadoop or status"
+    echo "count should be the number of machines to reassign"
+    exit 1
+fi
+
+if [ "$command" == 'morespark' ]; then
+    echo "I will try to allocate $count nodes to spark"
+    if (( "$count" <= `cat mapreduce-workers.inv | wc -l` )); then
+        for host in `head -$count mapreduce-workers.inv`; do
+            # Add to spark-workers
+            echo $host >> spark-workers.inv
+            # Remove from mapreduce-workers
+            grep -xv $host mapreduce-workers.inv > mapreduce-workers.inv.tmp ; mv mapreduce-workers.inv.tmp mapreduce-workers.inv
+        done
+    else
+        echo "Insufficient capacity to assign $count nodes to spark."
+        exit 2
+    fi
+elif [ "$command" == 'morehadoop' ]; then
+    echo "I will try to allocate $count nodes to hadoop"
+    if (( "$count" <= `cat spark-workers.inv | wc -l` )); then
+        for host in `head -$count spark-workers.inv`; do
+            # Add to mapreduce-workers
+            echo $host >> mapreduce-workers.inv
+            # Remove from spark-workers
+            grep -xv $host spark-workers.inv > spark-workers.inv.tmp ; mv spark-workers.inv.tmp spark-workers.inv
+        done
+    else
+        echo "Insufficient capacity to assign $count nodes to hadoop"
+        exit 2
+    fi
+fi
+
+# Now the magic happens ...
+ansible-playbook -v -i inventory.sh mapreduce-workers.yml spark-workers.yml

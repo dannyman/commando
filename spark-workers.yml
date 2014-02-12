@@ -1,0 +1,22 @@
+---
+- hosts: spark-workers
+  vars:
+    environment: "dev"
+    # BUG: For some reason refernces to {{ environment }} in my actions
+    # end up as {} so, hard-coding for now.
+  remote_user: root
+  tasks:
+    - name: Provision {{ environment }} user
+      user: name=dev
+    - name: Create some tmp nodes
+      command: mkdir -p /scratch/tmp0
+    - name: Halt TaskTracker
+      command: echo /opt/mapr/bin/tt_stop.sh
+    - name: Ensure TaskTracker is not running
+      shell: "! ps x | grep TaskTracker | grep -qv grep"
+    - name: Assign scratch partitions to {{ environment }} user
+      shell: chown -R dev /scratch/tmp*
+    - name: Provision mapred-site.xml
+      template: src=templates/mapred-site.xml-spark dest=/opt/mapr/conf/mapred-site.xml
+    - name: Start Map-Reduce TaskTracker
+      command: echo /usr/local/spark/bin/worker_start.sh

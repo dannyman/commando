@@ -17,9 +17,3 @@
       template: src=templates/mapred-site.xml-mapreduce dest=/opt/mapr/conf/mapred-site.xml
     - name: Start Map-Reduce TaskTracker
       command: echo /opt/mapr/bin/tt_start.sh
-      # NOTE: Can not seem to notify to a different node ...
-#      notify:
-#        - restart JobTracker
-#  handlers:
-#    - name: restart JobTracker
-#      shell: while [ `echo $(( RANDOM%12 ))` -ne 0 ]; do sleep 1; echo -n .; done && echo /opt/mapr/bin/jb_stop.sh && echo /opt/mapr/bin/jb_start.sh

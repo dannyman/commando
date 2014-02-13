@@ -34,6 +34,19 @@ if [ "$command" == 'morespark' ]; then
 elif [ "$command" == 'morehadoop' ]; then
     echo "I will try to allocate $count nodes to hadoop"
     if (( "$count" <= `cat spark-workers.inv | wc -l` )); then
+        # Code to conditionally pull spark nodes that aren't busy ...
+        # for host in `cat spark-workers.inv`; do
+        #   if (( "$count" > 0 )); then
+        #     ssh root@$host ps ax | grep -qv SparkExecutorBackend
+        #     if [ $? -ne 0 ];
+        #       echo $host >> mapreduce-workers.inv
+        #       grep -xv $host spark-workers.inv > spark-workers.inv.tmp ; mv spark-workers.inv.tmp spark-workers.inv
+        #       (( count-- ))
+        #     fi
+        #   fi
+        # done
+        # Then execute the next for loop if (( "$count" > 0 )) to fall
+        # back to original behavior for remaining busy nodes.
         for host in `head -$count spark-workers.inv`; do
             # Add to mapreduce-workers
             echo $host >> mapreduce-workers.inv
